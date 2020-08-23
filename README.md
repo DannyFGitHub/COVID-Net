@@ -1,14 +1,33 @@
-# Models used by COVID PneumoCheck Concept/App Project
-## Models converted and forked from the COVID-Net Open Source Initiative (CNOSI)
+# Models used by COVID PneumoCheck App
 
-A fork of the COVID-Net Open Source Initiative to convert and prepare the models for mobile development.
+___Models converted and forked from the COVID-Net Open Source Initiative (CNOSI)___
 
-Currently the CXR4 models A and B have been converted to TFLite with Default Optimisation and 16Float Optimisation.
+__A fork of the COVID-Net Open Source Initiative to convert and prepare the models for mobile development.__
+
+## Get Started
+
+To get started using a TFlite model in an android application consider the following examples:
+
+[Tensorflow Android Example](https://github.com/tensorflow/examples/tree/master/lite/examples/image_classification/android)
+
+[Live Image Recognition Article by Ahmed Gad](https://heartbeat.fritz.ai/image-recognition-for-android-with-a-custom-tensorflow-lite-model-6418186ecc0e)
+
+
+## Two Files are needed for Tensorflow Lite Android Mobile Usage:
+1. The list of labels - Labels.txt
+
+2. The TFlite model - model.tflite
+
+<br>
 
 The labels.txt file will be used to label the class names (types), order is important :
 [labels.txt](https://drive.google.com/file/d/1Bl0i_0D805eDT7YMzRUwB2NUU4R_Ljw1/view?usp=sharing)
 
+
 ### TFLite Version for mobile - COVIDNet Chest X-Ray Classification
+
+_Currently I have converted the CXR4 models A and B to TFLite with no optimisation, Default Optimisation and 16Float Optimisation._
+
 |  Type  | Input Resolution | COVID-19 Sensitivity | Optimisation |       Model      |
 |:------:|:----------------:|:--------------------:|:------------:|:----------------:|
 | TFlite |      480x480     |         ?            |   None       | [covidnet_a_unoptimised.tflite](https://drive.google.com/file/d/1skRubZENnJ6E0deTvsTZs0j3fnMV-Qld/view?usp=sharing)|
@@ -17,8 +36,11 @@ The labels.txt file will be used to label the class names (types), order is impo
 | TFlite |      480x480     |         ?            |   16Float    | [converted_model_a_16floatoptim.tflite](https://drive.google.com/file/d/1f0s07L7QXbLyEnAc2bCc9JM67I58JA_T/view?usp=sharing)|
 | TFlite |      480x480     |         ?            |   16Float    | [converted_model_b_16floatoptim.tflite](https://drive.google.com/file/d/1G7MDML2b9iUT-lm30ulv9sgahyToRFB-/view?usp=sharing)|
 
+<br>
 
 These models were converted from the following checkpoint unfrozen graph models:
+
+<br>
 
 #### ORIGINAL COVIDNet Chest X-Ray Classification
 |  Type | Input Resolution | COVID-19 Sensitivity | Accuracy | # Params (M) | MACs (G) |        Model        |
@@ -26,12 +48,16 @@ These models were converted from the following checkpoint unfrozen graph models:
 |  ckpt |      480x480     |         95.0         |   94.3   |      40.2    |  23.63   |[COVIDNet-CXR4-A](https://bit.ly/COVIDNet-CXR4-A)|
 |  ckpt |      480x480     |         93.0         |   93.7   |      11.7    |   7.50   |[COVIDNet-CXR4-B](https://bit.ly/COVIDNet-CXR4-B)|
 
+<br><Br>
+
 
 ### For inference using the TFLite models on python environment:
 
 **Use Tensorflow v 1.15.3**
 
-## Steps for inference
+<br>
+
+## Steps for inference (classifying) in a Python Environment for trialing the models
 **DISCLAIMER: Do not use this prediction for self-diagnosis. You should check with your local authorities for the latest advice on seeking medical assistance.**
 
 1. Download a TFLite model (e.g. "covidnet_a.tflite") and the 'labels.txt'
@@ -46,7 +72,7 @@ python3 inference-tflite.py --model_file
 Output will display on the terminal console.
 
 
-### Converting from CovidNet to TFlite
+## Converting from CovidNet to TFlite
 
 To create your own TFlite models from the Models provided by the Core COVID-Net Team a few key steps are required:
 
@@ -60,16 +86,26 @@ For more options and information, `python3 CovidNetModel2Tflite.py --help`
 
 #### About the CovidNet Models
 
-“COVIDNet-CXR4 models takes as input an image of shape (N, 480, 480, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches. If using the TF checkpoints, here are some useful tensors:
-•	**input tensor: input_1:0**
-• • Input tensor name is "input_1"
-•	logit tensor: norm_dense_1/MatMul:0
-•	**output tensor: norm_dense_1/Softmax:0**
-• • Output tensor name is "norm_dense_1/Softmax"
-•	label tensor: norm_dense_1_target:0
-•	class weights tensor: norm_dense_1_sample_weights:0
-•	loss tensor: loss/mul:0
-"
+
+COVIDNet-CXR4 models takes as input an image of shape (N, 480, 480, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches. If using the TF checkpoints, here are some useful tensors:
+
+- 	**input tensor: input_1:0**
+
+	- Input tensor name is "input_1"
+
+-	logit tensor: norm_dense_1/MatMul:0
+
+-	**output tensor: norm_dense_1/Softmax:0**
+
+	- Output tensor name is "norm_dense_1/Softmax"
+
+-	label tensor: norm_dense_1_target:0
+
+-	class weights tensor: norm_dense_1_sample_weights:0
+
+-	loss tensor: loss/mul:0
+
+
 
 For inference using the Core COVID-Net models (Unfrozen Graphs) (making predictions on an images):
 
@@ -88,14 +124,15 @@ python inference.py \
 ```
 4. For more options and information, `python inference.py --help`
 
+<br><br><Br>
 
-
-
-## COVID PneumoCheck team
+### COVID PneumoCheck team
 * Danny Falero
 
+<br><br><Br>
+<hr>
 
-## From Core COVID-Net Team view [their README](README.original.md)
+### From Core COVID-Net Team, for more view [their README](README.original.md)
 
 Please consider CNOSI's disclaimer as you utilise the models and resources found in this repository.
 
