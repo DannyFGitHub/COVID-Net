@@ -15,7 +15,7 @@ To get started using a TFlite model in an android application consider the follo
 
 ## Two Files are needed for Tensorflow Lite Android Mobile Usage:
 1. The list of labels - Labels.txt
-
+	
 2. The TFlite model - model.tflite
 
 <br>
@@ -28,13 +28,13 @@ The labels.txt file will be used to label the class names (types), order is impo
 
 _Currently I have converted the CXR4 models A and B to TFLite with no optimisation, Default Optimisation and 16Float Optimisation._
 
-|  Type  | Input Resolution | COVID-19 Sensitivity | Optimisation |       Model      |
-|:------:|:----------------:|:--------------------:|:------------:|:----------------:|
-| TFlite |      480x480     |         ?            |   None       | [covidnet_a_unoptimised.tflite](https://drive.google.com/file/d/1skRubZENnJ6E0deTvsTZs0j3fnMV-Qld/view?usp=sharing)|
-| TFlite |      480x480     |         95.0         |   Default    | [covidnet_a.tflite](https://drive.google.com/file/d/1_DWDkJgFnP_EtvWMMA4FdZBvxLj48T-y/view?usp=sharing)|
-| TFlite |      480x480     |         93.0         |   Default    | [covidnet_b.tflite](https://drive.google.com/file/d/1lUQfmPN1KLXBkGfmPUejFCsAP10zWqkQ/view?usp=sharing)|
-| TFlite |      480x480     |         ?            |   16Float    | [converted_model_a_16floatoptim.tflite](https://drive.google.com/file/d/1f0s07L7QXbLyEnAc2bCc9JM67I58JA_T/view?usp=sharing)|
-| TFlite |      480x480     |         ?            |   16Float    | [converted_model_b_16floatoptim.tflite](https://drive.google.com/file/d/1G7MDML2b9iUT-lm30ulv9sgahyToRFB-/view?usp=sharing)|
+|  Type  | Input Resolution | COVID-19 Sensitivity | Optimisation | Size |       Model      |
+|:------:|:----------------:|:--------------------:|:------------:|:----:|:----------------:|
+| TFlite |      480x480     |         ?            |   None       | 153M | [covidnet_a_unoptimised.tflite](https://drive.google.com/file/d/1skRubZENnJ6E0deTvsTZs0j3fnMV-Qld/view?usp=sharing)|
+| TFlite |      480x480     |         95.0         |   Default    |  40M | [covidnet_a.tflite](https://drive.google.com/file/d/1_DWDkJgFnP_EtvWMMA4FdZBvxLj48T-y/view?usp=sharing)|
+| TFlite |      480x480     |         93.0         |   Default    |  12M | [covidnet_b.tflite](https://drive.google.com/file/d/1lUQfmPN1KLXBkGfmPUejFCsAP10zWqkQ/view?usp=sharing)|
+| TFlite |      480x480     |         ?            |   16Float    |  81M | [converted_model_a_16floatoptim.tflite](https://drive.google.com/file/d/1f0s07L7QXbLyEnAc2bCc9JM67I58JA_T/view?usp=sharing)|
+| TFlite |      480x480     |         ?            |   16Float    |  23M | [converted_model_b_16floatoptim.tflite](https://drive.google.com/file/d/1G7MDML2b9iUT-lm30ulv9sgahyToRFB-/view?usp=sharing)|
 
 <br>
 
