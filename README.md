@@ -1,4 +1,103 @@
-# COVID-Net Open Source Initiative
+# Models used by COVID PneumoCheck Concept/App Project
+## Models converted and forked from the COVID-Net Open Source Initiative (CNOSI)
+
+A fork of the COVID-Net Open Source Initiative to convert and prepare the models for mobile development.
+
+Currently the CXR4 models A and B have been converted to TFLite with Default Optimisation and 16Float Optimisation.
+
+The labels.txt file will be used to label the class names (types), order is important :
+[labels.txt](https://drive.google.com/file/d/1Bl0i_0D805eDT7YMzRUwB2NUU4R_Ljw1/view?usp=sharing)
+
+### TFLite Version for mobile - COVIDNet Chest X-Ray Classification
+|  Type  | Input Resolution | COVID-19 Sensitivity | Optimisation |       Model      |
+|:------:|:----------------:|:--------------------:|:------------:|:----------------:|
+| TFlite |      480x480     |         ?            |   None       | [covidnet_a_unoptimised.tflite](https://drive.google.com/file/d/1skRubZENnJ6E0deTvsTZs0j3fnMV-Qld/view?usp=sharing)|
+| TFlite |      480x480     |         95.0         |   Default    | [covidnet_a.tflite](https://drive.google.com/file/d/1_DWDkJgFnP_EtvWMMA4FdZBvxLj48T-y/view?usp=sharing)|
+| TFlite |      480x480     |         93.0         |   Default    | [covidnet_b.tflite](https://drive.google.com/file/d/1lUQfmPN1KLXBkGfmPUejFCsAP10zWqkQ/view?usp=sharing)|
+| TFlite |      480x480     |         ?            |   16Float    | [converted_model_a_16floatoptim.tflite](https://drive.google.com/file/d/1f0s07L7QXbLyEnAc2bCc9JM67I58JA_T/view?usp=sharing)|
+| TFlite |      480x480     |         ?            |   16Float    | [converted_model_b_16floatoptim.tflite](https://drive.google.com/file/d/1G7MDML2b9iUT-lm30ulv9sgahyToRFB-/view?usp=sharing)|
+
+
+These models were converted from the following checkpoint unfrozen graph models:
+
+#### ORIGINAL COVIDNet Chest X-Ray Classification
+|  Type | Input Resolution | COVID-19 Sensitivity | Accuracy | # Params (M) | MACs (G) |        Model        |
+|:-----:|:----------------:|:--------------------:|:--------:|:------------:|:--------:|:-------------------:|
+|  ckpt |      480x480     |         95.0         |   94.3   |      40.2    |  23.63   |[COVIDNet-CXR4-A](https://bit.ly/COVIDNet-CXR4-A)|
+|  ckpt |      480x480     |         93.0         |   93.7   |      11.7    |   7.50   |[COVIDNet-CXR4-B](https://bit.ly/COVIDNet-CXR4-B)|
+
+
+### For inference using the TFLite models on python environment:
+
+**Use Tensorflow v 1.15.3**
+
+## Steps for inference
+**DISCLAIMER: Do not use this prediction for self-diagnosis. You should check with your local authorities for the latest advice on seeking medical assistance.**
+
+1. Download a TFLite model (e.g. "covidnet_a.tflite") and the 'labels.txt'
+2. Locate models and xray image to be inferenced
+3. To inference,
+```
+python3 inference-tflite.py --model_file
+  /Users/<username>/Desktop/AndroidCovidNet/TFLITEModels/covidnet_b.tflite --label_file
+  /Users/<username>/Desktop/AndroidCovidNet/TFLITEModels/labels.txt --image
+  /Users/<username>/Desktop/AndroidCovidNet/images/pneu1115.jpg
+```
+Output will display on the terminal console.
+
+
+### Converting from CovidNet to TFlite
+
+To create your own TFlite models from the Models provided by the Core COVID-Net Team a few key steps are required:
+
+1. Freeze the graph and export the frozen graph converting it from v1 tensorflow graph to a frozen graph .pb format
+2. Convert the frozen graph model to tflite model
+
+The CovidNetModel2Tflite.py can help perform these two steps.
+
+For more options and information, `python3 CovidNetModel2Tflite.py --help`
+
+
+#### About the CovidNet Models
+
+“COVIDNet-CXR4 models takes as input an image of shape (N, 480, 480, 3) and outputs the softmax probabilities as (N, 3), where N is the number of batches. If using the TF checkpoints, here are some useful tensors:
+•	**input tensor: input_1:0**
+• • Input tensor name is "input_1"
+•	logit tensor: norm_dense_1/MatMul:0
+•	**output tensor: norm_dense_1/Softmax:0**
+• • Output tensor name is "norm_dense_1/Softmax"
+•	label tensor: norm_dense_1_target:0
+•	class weights tensor: norm_dense_1_sample_weights:0
+•	loss tensor: loss/mul:0
+"
+
+For inference using the Core COVID-Net models (Unfrozen Graphs) (making predictions on an images):
+
+## Steps for inference
+**DISCLAIMER: Do not use this prediction for self-diagnosis. You should check with your local authorities for the latest advice on seeking medical assistance.**
+
+1. Download a model from the [pretrained models section](models.md)
+2. Locate models and xray image to be inferenced
+3. To inference,
+```
+python inference.py \
+    --weightspath models/COVIDNet-CXR3-B \
+    --metaname model.meta \
+    --ckptname model-1014 \
+    --imagepath assets/ex-covid.jpeg
+```
+4. For more options and information, `python inference.py --help`
+
+
+
+
+## COVID PneumoCheck team
+* Danny Falero
+
+
+## From Core COVID-Net Team view [their README](README.original.md)
+
+Please consider CNOSI's disclaimer as you utilise the models and resources found in this repository.
 
 **Note: The COVID-Net models provided here are intended to be used as reference models that can be built upon and enhanced as new data becomes available. They are currently at a research stage and not yet intended as production-ready models (not meant for direct clinical diagnosis), and we are working continuously to improve them as new data becomes available. Please do not use COVID-Net for self-diagnosis and seek help from your local health authorities.**
 
@@ -11,27 +110,14 @@
 **Update 05/13/2020:** We released 3 new models, COVIDNet-CXR3-A, COVIDNet-CXR3-B, COVIDNet-CXR3-C, which were trained on a new COVIDx dataset with both PA and AP X-Rays. The results are now based on a test set containing 100 COVID-19 samples.\
 **Update 04/16/2020:** If you have questions, please check the new [FAQ](docs/FAQ.md) page first.
 
-<p align="center">
-	<img src="assets/covidnetv3-3p-rca.png" alt="photo not available" width="70%" height="70%">
-	<br>
-	<em>Example chest radiography images of COVID-19 cases from 2 different patients and their associated critical factors (highlighted in red) as identified by GSInquire.</em>
-</p>
-
-The COVID-19 pandemic continues to have a devastating effect on the health and well-being of the global population.  A critical step in the fight against COVID-19 is effective screening of infected patients, with one of the key screening approaches being radiology examination using chest radiography.  It was found in early studies that patients present abnormalities in chest radiography images that are characteristic of those infected with COVID-19.  Motivated by this and inspired by the open source efforts of the research community, in this study we introduce COVID-Net, a deep convolutional neural network design tailored for the detection of COVID-19 cases from chest X-ray (CXR) images that is open source and available to the general public. To the best of the authors' knowledge, COVID-Net is one of the first open source network designs for COVID-19 detection from CXR images at the time of initial release.  We also introduce COVIDx, an open access benchmark dataset that we generated comprising of 13,975 CXR images across 13,870 patient patient cases, with the largest number of publicly available COVID-19 positive cases to the best of the authors' knowledge.  Furthermore, we investigate how COVID-Net makes predictions using an explainability method in an attempt to not only gain deeper insights into critical factors associated with COVID cases, which can aid clinicians in improved screening, but also audit COVID-Net in a responsible and transparent manner to validate that it is making decisions based on relevant information from the CXR images.  **By no means a production-ready solution**, the hope is that the open access COVID-Net, along with the description on constructing the open source COVIDx dataset, will be leveraged and build upon by both researchers and citizen data scientists alike to accelerate the development of highly accurate yet practical deep learning solutions for detecting COVID-19 cases and accelerate treatment of those who need it the most.
-
-For a detailed description of the methodology behind COVID-Net and a full description of the COVIDx dataset, please click [here](https://arxiv.org/abs/2003.09871).
-
-For a detailed description of the methodology behind COVID-Net based deep neural networks for geographic extent and opacity extent scoring of chest X-rays for SARS-CoV-2 lung disease severity, please click [here](https://arxiv.org/abs/2005.12855).
-
-For a detailed description of the methodology behind COVIDNet-CT and the associated dataset of 104,009 CT images from 1,489 patients, please click [here](https://github.com/haydengunraj/COVIDNet-CT).
+**By no means a production-ready solution**, the hope is that the open access COVID-Net, along with the description on constructing the open source COVIDx dataset, will be leveraged and build upon by both researchers and citizen data scientists alike to accelerate the development of highly accurate yet practical deep learning solutions for detecting COVID-19 cases and accelerate treatment of those who need it the most.
 
 Currently, the COVID-Net team is working on **COVID-RiskNet**, a deep neural network tailored for COVID-19 risk stratification.  Currently this is available as a work-in-progress via included `train_risknet.py` script, help to contribute data and we can improve this tool.
 
 If you would like to **contribute COVID-19 x-ray images**, please submit to https://figure1.typeform.com/to/lLrHwv. Lets all work together to stop the spread of COVID-19!
 
-If you are a researcher or healthcare worker and you would like access to the **GSInquire tool to use to interpret COVID-Net results** on your data or existing data, please reach out to a28wong@uwaterloo.ca or alex@darwinai.ca
-
 Our desire is to encourage broad adoption and contribution to this project. Accordingly this project has been licensed under the GNU Affero General Public License 3.0. Please see [license file](LICENSE.md) for terms. If you would like to discuss alternative licensing models, please reach out to us at linda.wang513@gmail.com and a28wong@uwaterloo.ca or alex@darwinai.ca
+
 
 If there are any technical questions after the README, FAQ, and past/current issues have been read, please post an issue or contact:
 * desmond.zq.lin@gmail.com
@@ -40,7 +126,7 @@ If there are any technical questions after the README, FAQ, and past/current iss
 * linda.wang513@gmail.com
 * ashkan.ebadi@nrc-cnrc.gc.ca
 
-If you find our work useful, can cite our paper using:
+If you find their work useful, can cite their paper using:
 
 ```
 @misc{wang2020covidnet,
@@ -86,289 +172,4 @@ The main requirements are listed below:
 * Numpy
 * Scikit-Learn
 * Matplotlib
-
-Additional requirements to generate dataset:
-
-* PyDicom
-* Pandas
-* Jupyter
-
-## Results
-These are the final results for the COVIDNet models.
-
-### COVIDNet-CXR4-A on COVIDx4 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">94.0</td>
-    <td class="tg-c3ow">94.0</td>
-    <td class="tg-c3ow">95.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">91.3</td>
-    <td class="tg-c3ow">93.1</td>
-    <td class="tg-c3ow">99.0</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR4-B on COVIDx4 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">96.0</td>
-    <td class="tg-c3ow">92.0</td>
-    <td class="tg-c3ow">93.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">88.9</td>
-    <td class="tg-c3ow">93.9</td>
-    <td class="tg-c3ow">98.9</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR4-C on COVIDx4 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">95.0</td>
-    <td class="tg-c3ow">89.0</td>
-    <td class="tg-c3ow">96.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">90.5</td>
-    <td class="tg-c3ow">93.7</td>
-    <td class="tg-c3ow">96.0</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR3-A on COVIDx3 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">93.0</td>
-    <td class="tg-c3ow">93.0</td>
-    <td class="tg-c3ow">94.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">92.1</td>
-    <td class="tg-c3ow">90.3</td>
-    <td class="tg-c3ow">97.9</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR3-B on COVIDx3 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">95.0</td>
-    <td class="tg-c3ow">94.0</td>
-    <td class="tg-c3ow">91.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">90.5</td>
-    <td class="tg-c3ow">91.3</td>
-    <td class="tg-c3ow">98.9</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR3-C on COVIDx3 (100 COVID-19 test)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">92.0</td>
-    <td class="tg-c3ow">90.0</td>
-    <td class="tg-c3ow">95.0</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">90.2</td>
-    <td class="tg-c3ow">91.8</td>
-    <td class="tg-c3ow">95.0</td>
-  </tr>
-</table></div>
-
-### COVIDNet-CXR Small on COVIDx2 (31 COVID-19 test)
-<!--<p>
-	<img src="assets/cm-covidnetcxr-small.png" alt="photo not available" width="50%" height="50%">
-	<br>
-	<em>Confusion matrix for COVIDNet-CXR Small on the COVIDx test dataset.</em>
-</p>-->
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">97.0</td>
-    <td class="tg-c3ow">90.0</td>
-    <td class="tg-c3ow">87.1</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">89.8</td>
-    <td class="tg-c3ow">94.7</td>
-    <td class="tg-c3ow">96.4</td>
-  </tr>
-</table></div>
-
-
-### COVIDNet-CXR Large on COVIDx2 (31 COVID-19 test)
-<!--<p>
-	<img src="assets/cm-covidnetcxr-large.png" alt="photo not available" width="50%" height="50%">
-	<br>
-	<em>Confusion matrix for COVIDNet-CXR Large on the COVIDx test dataset.</em>
-</p>-->
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Sensitivity (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">99.0</td>
-    <td class="tg-c3ow">89.0</td>
-    <td class="tg-c3ow">96.8</td>
-  </tr>
-</table></div>
-
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Positive Predictive Value (%)</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Normal</td>
-    <td class="tg-7btt">Pneumonia</td>
-    <td class="tg-7btt">COVID-19</td>
-  </tr>
-  <tr>
-    <td class="tg-c3ow">91.7</td>
-    <td class="tg-c3ow">98.9</td>
-    <td class="tg-c3ow">90.9</td>
-  </tr>
-</table></div>
+* Tensorflow Lite
