@@ -4,8 +4,6 @@ ___Models converted and forked from the COVID-Net Open Source Initiative (CNOSI)
 
 __A fork of the COVID-Net Open Source Initiative to convert and prepare the models for mobile development.__
 
-__For a POC application implementing these models please check : ["COVID-19 PneumoCheck App"](https://github.com/DannyFGitHub/COVID-19PneumoCheckApp)__
-
 ## Get Started
 
 To get started using a TFlite model in an android application consider the following examples:
