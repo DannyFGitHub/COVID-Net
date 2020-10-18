@@ -1,4 +1,4 @@
-# Models used by COVID PneumoCheck App
+# Models used by CovidNet-TFLite-Mobile-Implementation App
 
 ___Models converted and forked from the COVID-Net Open Source Initiative (CNOSI)___
 
